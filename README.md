@@ -1,1 +1,3 @@
-# shine
+# Shine
+
+Present and Provide.

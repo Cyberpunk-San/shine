@@ -19,4 +19,6 @@ STRUCTURE\
 ├── style.css\
 ├── script.js\
 └── assets
+
+Done@26.10.2025
     

@@ -12,3 +12,11 @@ Plan concept, build base layout, design visuals, add animations, fill content, o
 
 Optional: add sounds, lighting effects, or 3D depth for immersion.
 
+
+
+STRUCTURE\
+├── index.html\
+├── style.css\
+├── script.js\
+└── assets
+    

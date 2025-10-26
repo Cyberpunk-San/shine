@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nothing to Talk About - The End</title>
+  <style>
+    /* Reset and base styles */
+    /* ===== RESET & BASE ===== */
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+
+    body {
+    width: 100vw;
+    min-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #0a0a0a;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: default;
+    }
+
+    /* Custom scrollbar styles */
+    ::-webkit-scrollbar {
+    width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+    }
+
+    html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+    }
+
+    /* ===== INTERACTIVE BACKGROUNDS ===== */
+    .interactive-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    }
+
+    /* Section 1: Particle Field */
+    .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+    }
+
+    /* Section 2: Wave Canvas */
+    #wave-canvas {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+    }
+
+    /* Section 3: Grid System */
+    .grid-line {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.03);
+    transition: background-color 0.3s ease;
+    }
+
+    .grid-line.vertical {
+    width: 1px;
+    height: 100%;
+    }
+
+    .grid-line.horizontal {
+    width: 100%;
+    height: 1px;
+    }
+
+    /* Section 4: Color Flow */
+    .flow-particle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(20px);
+    opacity: 0.7;
+    mix-blend-mode: screen;
+    }
+
+    /* Section 5: Binary Rain */
+    .binary-digit {
+    position: absolute;
+    color: rgba(0, 255, 170, 0.7);
+    font-family: monospace;
+    font-size: 1.2rem;
+    opacity: 0;
+    animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+    to {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+    }
+
+    /* ===== SECTION CONTENT ===== */
+    .section-content {
+    min-height: 100vh;
+    padding: 100px 20px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 20;
+    }
+
+    .scroll-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+    }
+
+    .section-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+    font-weight: 700;
+    }
+
+    .section-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.8);
+    }
+
+    .section-description {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    }
+
+    /* ===== FIXED NAVIGATION ===== */
+    .fixed-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+    }
+
+    .nav-left,
+    .nav-right {
+    pointer-events: auto;
+    display: flex;
+    gap: 0.75rem;
+    }
+
+    .nav-btn {
+    width: 3rem;
+    height: 3rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 1rem;
+    }
+
+    .nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-btn.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* ===== SCROLL INDICATOR ===== */
+    .scroll-indicator {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1rem;
+    animation: bounce 2s infinite;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    }
+
+    @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+    40% { transform: translateX(-50%) translateY(-10px); }
+    60% { transform: translateX(-50%) translateY(-5px); }
+    }
+
+    /* ===== CUBE GAME STYLES ===== */
+    .cube-game-container {
+    margin: 3rem auto;
+    padding: 2.5rem;
+    max-width: 1000px;
+    background: rgba(15, 15, 15, 0.95);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 25;
+    display: block;
+    }
+
+    .cube-game {
+    width: 100%;
+    }
+
+    .game-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    }
+
+    .header-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    }
+
+    .game-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    font-weight: 700;
+    }
+
+    .game-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.5;
+    }
+
+    .cube-scene-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin: 2rem 0;
+    }
+
+    .threejs-scene {
+    width: 100%;
+    height: 400px;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 26;
+    }
+
+    .color-legend {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    }
+
+    .color-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    }
+
+    .color-swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .front-color { background: #ff4444; }
+    .back-color { background: #00cc99; }
+    .right-color { background: #4488ff; }
+    .left-color { background: #44dd44; }
+    .top-color { background: #ffff44; }
+    .bottom-color { background: #ff44ff; }
+
+    .game-controls {
+    display: grid;
+    gap: 2rem;
+    margin: 2rem 0;
+    }
+
+    .control-group h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.2rem;
+    }
+
+    .rotation-controls {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+    }
+
+    .control-btn {
+    padding: 0.8rem 0.5rem;
+    background: rgba(100, 200, 255, 0.15);
+    border: 1px solid rgba(100, 200, 255, 0.3);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 0.9rem;
+    }
+
+    .control-btn:hover {
+    background: rgba(100, 200, 255, 0.25);
+    transform: translateY(-2px);
+    }
+
+    .action-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    }
+
+    .action-btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 1rem;
+    }
+
+    .action-btn.shuffle { background: #ff6b6b; }
+    .action-btn.solve { background: #4ecdc4; }
+    .action-btn.reset { background: #54a0ff; }
+
+    .action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .game-info {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    }
+
+    .info-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+    }
+
+    .info-value {
+    font-weight: 600;
+    font-size: 1.1rem;
+    }
+
+    .info-value.solved {
+    color: #4ecdc4;
+    animation: pulse 2s infinite;
+    }
+
+    .info-value.unsolved {
+    color: #ff6b6b;
+    }
+
+    .game-instructions {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    text-align: center;
+    }
+
+    .key-hint {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.3rem 0.6rem;
+    border-radius: 5px;
+    margin: 0 0.2rem;
+    font-family: monospace;
+    font-size: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+    }
+
+    /* ===== ADDITIONAL CONTENT ===== */
+    .additional-text {
+    margin-top: 3rem;
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+    }
+
+    .additional-text h3 {
+    color: #ffffff;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    }
+
+    .additional-text p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    font-size: 1.1rem;
+    }
+
+    .quote {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border-left: 4px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    }
+
+    .extended-content {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .extended-content h4 {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    }
+
+    .extended-content p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    }
+
+    /* ===== RESPONSIVE ADJUSTMENTS ===== */
+    @media (max-width: 768px) {
+    .section-content {
+        padding: 80px 15px 40px;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+    }
+
+    .section-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .section-description {
+        font-size: 1rem;
+    }
+
+    .cube-game-container {
+        padding: 1.5rem;
+        margin: 2rem 1rem;
+    }
+
+    .threejs-scene {
+        height: 300px;
+    }
+
+    .rotation-controls {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .action-controls {
+        flex-direction: column;
+    }
+
+    .additional-text {
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .scroll-indicator {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="fixed-nav">
+      <div class="nav-left">
+        <button class="nav-btn" id="menu-btn">☰</button>
+      </div>
+      <div class="nav-right">
+        <button class="nav-btn" onclick="location.href='index.html'">1</button>
+        <button class="nav-btn" onclick="location.href='silence.html'">2</button>
+        <button class="nav-btn" onclick="location.href='emptiness.html'">3</button>
+        <button class="nav-btn" onclick="location.href='stillness.html'">4</button>
+        <button class="nav-btn active" onclick="location.href='end.html'">5</button>
+      </div>
+    </div>
+
+    <div class="interactive-bg" id="binary-rain"></div>
+
+    <div class="section-content">
+      <div class="scroll-content">
+        <h2 class="section-title">The End of Conversation</h2>
+        <p class="section-subtitle">Where Words Cease to Matter</p>
+        <p class="section-description">Thank you for visiting this place with nothing to talk about. Sometimes the most meaningful communication happens without a single word being spoken.</p>
+
+        <!-- Cube Game Container -->
+        <div id="cube-game-placeholder"></div>
+
+        <div class="additional-text">
+          <h3>The Silence Speaks</h3>
+          <p>In the absence of words, we find space for reflection. The cube above represents the puzzle of communication - sometimes complex, sometimes simple, but always present.</p>
+          <div class="quote">
+            "The most important things are the hardest to say, because words diminish them."
+            <br>- Stephen King
+          </div>
+          <p>As you interact with the cube, consider how much can be expressed without language. The colors, the movements, the patterns - all communicating in their own silent way.</p>
+          <h3>Beyond Words</h3>
+          <p>True understanding often transcends verbal communication. It exists in the spaces between words, in the shared experiences, and in the unspoken connections that bind us.</p>
+          <div class="quote">
+            "Silence is a source of great strength."
+            <br>- Lao Tzu
+          </div>
+          <p>The cube's rotations and colors create a language of their own - one that doesn't need translation, only observation and interaction.</p>
+          <h3>The Final Thought</h3>
+          <p>Perhaps the end of conversation isn't an ending at all, but a beginning of a different kind of communication. One that is more authentic, more profound, and more true to our shared human experience.</p>
+          <div class="quote">
+            "We have two ears and one mouth so that we can listen twice as much as we speak."
+            <br>- Epictetus
+          </div>
+        </div>
+
+        <div class="extended-content">
+          <h4>Reflections on Silence</h4>
+          <p>In our constantly connected world, we often forget the power of silence. The cube game serves as a metaphor for the unspoken connections that form the foundation of true understanding.</p>
+          <p>Each rotation represents a shift in perspective, each color a different facet of communication. Like the cube, human connection has many sides, all equally important.</p>
+          <h4>The Beauty of Stillness</h4>
+          <p>There is profound beauty in moments of shared silence. When words fall away, what remains is the raw, unfiltered connection between individuals.</p>
+          <p>The cube, in its solved state, represents harmony and balance - a state we often seek in our relationships and conversations.</p>
+          <h4>Embracing the Unspoken</h4>
+          <p>Some of the most meaningful moments in life are those filled with comfortable silence. The cube reminds us that communication isn't always about what is said, but about what is understood.</p>
+          <p>As you continue to explore this space, remember that sometimes the most powerful statements are made in silence, and the deepest connections are formed without words.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-indicator">
+      Scroll to explore more ↓
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="navigation.js"></script>
+  <script src="script.js" defer></script>
+  <script src="cube.js"></script>
+
+  <script>
+    // Remove scroll indicator after first scroll
+    let scrollHandler = function() {
+      const indicator = document.querySelector('.scroll-indicator');
+      if (indicator && (window.scrollY > 100 || document.documentElement.scrollTop > 100)) {
+        indicator.style.opacity = '0';
+        indicator.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => {
+          if (indicator && indicator.parentNode) {
+            indicator.parentNode.removeChild(indicator);
+          }
+        }, 500);
+        window.removeEventListener('scroll', scrollHandler);
+      }
+    };
+
+    window.addEventListener('scroll', scrollHandler);
+    window.addEventListener('touchmove', scrollHandler);
+  </script>
+</body>
+</html>

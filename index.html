@@ -1,21 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BASIC</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horizontal Lobby Walkthrough</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="scroll-wrapper">
-    <section class="scene" id="studio-lobby">
-      <img src="assets/mainone.png" alt="Background" class="bg">
-      <div class="prop rotating"></div>
-    </section>
+  <!-- Fixed Navigation (stays in place while scrolling) -->
+  <div class="fixed-nav">
+    <div class="nav-left">
+      <button class="nav-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="nav-right">
+      <button class="nav-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </button>
+      <button class="nav-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
 
-    <section class="scene" id="game-zone">
-      <img src="assets/sub.jpg" alt="Area" class="bg">
-    </section>
+  <!-- Scroll Hint -->
+  <div class="scroll-hint">
+    <p>Scroll to walk through the space →</p>
+  </div>
+
+  <!-- Horizontal Scroll Container -->
+  <div class="horizontal-container">
+    <div class="lobby-space">
+      
+      <!-- Background Layer (slowest parallax) -->
+      <div class="parallax-layer background-layer">
+        <div class="wall-texture">
+          <img src="https://images.unsplash.com/photo-1584530313715-bfe628686135?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaW5pbWFsJTIwd2FsbCUyMHRleHR1cmV8ZW58MXx8fHwxNzYxNDUwOTk2fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" alt="Wall texture">
+        </div>
+      </div>
+
+      <!-- Midground Layer (medium parallax) -->
+      <div class="parallax-layer midground-layer">
+        <div class="lobby-elements">
+          <div class="lobby-element door"></div>
+          <div class="lobby-element window"></div>
+          <div class="lobby-element door-small"></div>
+        </div>
+      </div>
+
+      <!-- Foreground Layer (fastest parallax) -->
+      <div class="parallax-layer foreground-layer">
+        <div class="floor-texture">
+          <img src="https://images.unsplash.com/photo-1620143172444-b29e78c56862?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGxpZ2h0JTIwZmxvb3J8ZW58MXx8fHwxNzYxNDUwOTk3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" alt="Floor">
+          <div class="floor-gradient"></div>
+        </div>
+      </div>
+
+      <!-- Lighting Overlay (animated) -->
+      <div class="lighting-overlay">
+        <div class="light light-1"></div>
+        <div class="light light-2"></div>
+      </div>
+
+      <!-- Spacer to enable scrolling -->
+      <div class="scroll-spacer"></div>
+    </div>
   </div>
 
   <script src="script.js"></script>

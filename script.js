@@ -19,7 +19,7 @@ const lightingOverlay = document.querySelector('.lighting-overlay');
 container.addEventListener('scroll', () => {
   const scrollPos = container.scrollLeft;
   
-  // Parallax speeds (adjust these to change effect intensity)
+  // Parallax speeds (adjust to change effect intensity)
   const backgroundSpeed = 0.1;  // slowest
   const midgroundSpeed = 0.2;   // medium
   const foregroundSpeed = 0.3;  // fastest

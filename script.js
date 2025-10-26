@@ -1,55 +1,93 @@
 // ===== HORIZONTAL SCROLL CONVERSION =====
-// Converts vertical mouse wheel to horizontal scroll
 const container = document.querySelector('.horizontal-container');
+const navButtons = document.querySelectorAll('.nav-btn');
 
-container.addEventListener('wheel', (e) => {
-  if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-    e.preventDefault();
-    container.scrollLeft += e.deltaY;
-  }
-}, { passive: false });
+// smooth scroll factor
+let isScrolling = false;
+
+container.addEventListener(
+  "wheel",
+  (e) => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      e.preventDefault();
+      container.scrollLeft += e.deltaY * 1.2; // slightly faster horizontal scroll
+    }
+  },
+  { passive: false }
+);
 
 // ===== PARALLAX EFFECT =====
-// Different layers move at different speeds
 const backgroundLayer = document.querySelector('.background-layer');
 const midgroundLayer = document.querySelector('.midground-layer');
 const foregroundLayer = document.querySelector('.foreground-layer');
 const lightingOverlay = document.querySelector('.lighting-overlay');
+const scrollHint = document.querySelector('.scroll-hint');
 
-container.addEventListener('scroll', () => {
+container.addEventListener("scroll", () => {
   const scrollPos = container.scrollLeft;
-  
-  // Parallax speeds (adjust to change effect intensity)
-  const backgroundSpeed = 0.1;  // slowest
-  const midgroundSpeed = 0.2;   // medium
-  const foregroundSpeed = 0.3;  // fastest
-  
-  // Apply transforms
-  backgroundLayer.style.transform = `translateX(${-scrollPos * backgroundSpeed}px)`;
-  midgroundLayer.style.transform = `translateX(${-scrollPos * midgroundSpeed}px)`;
-  foregroundLayer.style.transform = `translateX(${-scrollPos * foregroundSpeed}px)`;
-  
-  // Lighting animation 
-  const maxScroll = 3000;
-  const scrollProgress = scrollPos / maxScroll;
-  
-  // Opacity varies: starts at 0.3, peaks at 0.6 in middle, back to 0.3
-  let opacity;
-  if (scrollProgress < 0.5) {
-    opacity = 0.3 + (scrollProgress * 0.6);
-  } else {
-    opacity = 0.6 - ((scrollProgress - 0.5) * 0.6);
-  }
-  
-  lightingOverlay.style.opacity = opacity;
+  const maxScroll = container.scrollWidth - container.clientWidth;
+  const progress = scrollPos / maxScroll;
+
+  // Parallax speeds
+  backgroundLayer.style.transform = `translateX(${-scrollPos * 0.1}px)`;
+  midgroundLayer.style.transform = `translateX(${-scrollPos * 0.25}px)`;
+  foregroundLayer.style.transform = `translateX(${-scrollPos * 0.4}px)`;
+
+  // Lighting: fades in/out like breathing light
+  const opacity = 0.3 + Math.sin(progress * Math.PI) * 0.3;
+  lightingOverlay.style.opacity = opacity.toFixed(2);
+
+  // Scroll hint fades away after first move
+  if (scrollPos > 50) scrollHint.style.opacity = "0";
+  else scrollHint.style.opacity = "1";
+
+  // Activate nav button based on scroll position
+  updateActiveButton(scrollPos);
 });
 
 // ===== NAVIGATION BUTTON HANDLERS =====
-
-const navButtons = document.querySelectorAll('.nav-btn');
-
-navButtons.forEach((button, index) => {
-  button.addEventListener('click', () => {
-    console.log(`Button ${index + 1} clicked`);
+const sectionWidth = window.innerWidth;
+navButtons.forEach((btn, index) => {
+  btn.addEventListener("click", () => {
+    container.scrollTo({
+      left: index * sectionWidth,
+      behavior: "smooth",
+    });
+    animateButton(btn);
   });
+});
+
+// ===== BUTTON CLICK ANIMATION =====
+function animateButton(btn) {
+  btn.classList.add("pressed");
+  setTimeout(() => btn.classList.remove("pressed"), 300);
+}
+
+// ===== SCROLL-BASED NAV HIGHLIGHT =====
+function updateActiveButton(scrollPos) {
+  const sectionIndex = Math.round(scrollPos / sectionWidth);
+  navButtons.forEach((btn, i) => {
+    btn.classList.toggle("active", i === sectionIndex);
+  });
+}
+
+// ===== KEYBOARD NAVIGATION (← → keys) =====
+window.addEventListener("keydown", (e) => {
+  const activeIndex = [...navButtons].findIndex((btn) =>
+    btn.classList.contains("active")
+  );
+
+  if (e.key === "ArrowRight" && activeIndex < navButtons.length - 1) {
+    navButtons[activeIndex + 1].click();
+  } else if (e.key === "ArrowLeft" && activeIndex > 0) {
+    navButtons[activeIndex - 1].click();
+  }
+});
+
+// ===== PARALLAX MOUSE INTERACTION =====
+document.addEventListener("mousemove", (e) => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 30; // tilt factor
+  const y = (e.clientY / window.innerHeight - 0.5) * 20;
+
+  foregroundLayer.style.transform += ` rotateY(${x * 0.05}deg) rotateX(${-y * 0.05}deg)`;
 });

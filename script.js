@@ -20,9 +20,9 @@ container.addEventListener('scroll', () => {
   const scrollPos = container.scrollLeft;
   
   // Parallax speeds (adjust these to change effect intensity)
-  const backgroundSpeed = 0.2;  // slowest
-  const midgroundSpeed = 0.3;   // medium
-  const foregroundSpeed = 0.4;  // fastest
+  const backgroundSpeed = 0.1;  // slowest
+  const midgroundSpeed = 0.2;   // medium
+  const foregroundSpeed = 0.3;  // fastest
   
   // Apply transforms
   backgroundLayer.style.transform = `translateX(${-scrollPos * backgroundSpeed}px)`;
